@@ -470,6 +470,65 @@ export interface ApiAuthorAuthor extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCartItemCartItem extends Struct.CollectionTypeSchema {
+  collectionName: 'cart_items';
+  info: {
+    displayName: 'cartItem';
+    pluralName: 'cart-items';
+    singularName: 'cart-item';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    cart: Schema.Attribute.Relation<'manyToOne', 'api::cart.cart'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::cart-item.cart-item'
+    > &
+      Schema.Attribute.Private;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
+    publishedAt: Schema.Attribute.DateTime;
+    quantity: Schema.Attribute.BigInteger;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiCartCart extends Struct.CollectionTypeSchema {
+  collectionName: 'carts';
+  info: {
+    displayName: 'cart';
+    pluralName: 'carts';
+    singularName: 'cart';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    cart_items: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::cart-item.cart-item'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::cart.cart'> &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    userId: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   collectionName: 'categories';
   info: {
@@ -514,6 +573,7 @@ export interface ApiCollectionCollection extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    collectionName: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -526,10 +586,13 @@ export interface ApiCollectionCollection extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    season: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Spring'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    year: Schema.Attribute.BigInteger;
   };
 }
 
@@ -577,22 +640,37 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    capacity: Schema.Attribute.Integer;
+    color: Schema.Attribute.String & Schema.Attribute.DefaultTo<'Red'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
-    image: Schema.Attribute.Media<'images'>;
+    imageSrc: Schema.Attribute.Text & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::product.product'
     > &
       Schema.Attribute.Private;
+    material: Schema.Attribute.String & Schema.Attribute.DefaultTo<'wood'>;
     name: Schema.Attribute.String & Schema.Attribute.Required;
+    price: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<1782>;
     publishedAt: Schema.Attribute.DateTime;
+    shippingInfo: Schema.Attribute.String &
+      Schema.Attribute.DefaultTo<'VN Express'>;
+    stock: Schema.Attribute.BigInteger &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'100'>;
+    type: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    warranty: Schema.Attribute.BigInteger &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'2'>;
   };
 }
 
@@ -1051,12 +1129,16 @@ export interface PluginUsersPermissionsUser
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
+    address: Schema.Attribute.Text;
+    article: Schema.Attribute.Relation<'oneToOne', 'api::article.article'>;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    cart: Schema.Attribute.Relation<'oneToOne', 'api::cart.cart'>;
+    city: Schema.Attribute.String;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    country: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1065,6 +1147,8 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    firstName: Schema.Attribute.String;
+    lastName: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1076,6 +1160,8 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    phone: Schema.Attribute.BigInteger;
+    postalCode: Schema.Attribute.String;
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1083,6 +1169,7 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    shippingMethod: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1108,6 +1195,8 @@ declare module '@strapi/strapi' {
       'api::about.about': ApiAboutAbout;
       'api::article.article': ApiArticleArticle;
       'api::author.author': ApiAuthorAuthor;
+      'api::cart-item.cart-item': ApiCartItemCartItem;
+      'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;
       'api::collection.collection': ApiCollectionCollection;
       'api::global.global': ApiGlobalGlobal;

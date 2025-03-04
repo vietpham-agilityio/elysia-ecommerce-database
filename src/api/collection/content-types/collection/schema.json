@@ -11,9 +11,10 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "title": {
+    "season": {
       "type": "string",
-      "required": true
+      "required": true,
+      "default": "Spring"
     },
     "description": {
       "type": "text",
@@ -23,6 +24,12 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::product.product"
+    },
+    "year": {
+      "type": "biginteger"
+    },
+    "collectionName": {
+      "type": "string"
     }
   }
 }

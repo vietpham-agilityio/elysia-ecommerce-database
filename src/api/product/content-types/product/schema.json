@@ -19,12 +19,42 @@
       "type": "text",
       "required": true
     },
-    "image": {
-      "allowedTypes": [
-        "images"
-      ],
-      "type": "media",
-      "multiple": false
+    "imageSrc": {
+      "type": "text",
+      "required": true
+    },
+    "color": {
+      "type": "string",
+      "default": "Red"
+    },
+    "price": {
+      "type": "integer",
+      "default": 1782,
+      "required": true
+    },
+    "capacity": {
+      "type": "integer"
+    },
+    "stock": {
+      "type": "biginteger",
+      "required": true,
+      "default": "100"
+    },
+    "warranty": {
+      "type": "biginteger",
+      "required": true,
+      "default": "2"
+    },
+    "material": {
+      "type": "string",
+      "default": "wood"
+    },
+    "type": {
+      "type": "string"
+    },
+    "shippingInfo": {
+      "type": "string",
+      "default": "VN Express"
     }
   }
 }
