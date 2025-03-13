@@ -561,6 +561,45 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiCheckoutCheckout extends Struct.CollectionTypeSchema {
+  collectionName: 'checkouts';
+  info: {
+    displayName: 'Checkout';
+    pluralName: 'checkouts';
+    singularName: 'checkout';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    address: Schema.Attribute.String;
+    apartment: Schema.Attribute.String;
+    city: Schema.Attribute.String;
+    country: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email;
+    emailOffers: Schema.Attribute.Boolean;
+    firstName: Schema.Attribute.String;
+    lastName: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::checkout.checkout'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    saveInfo: Schema.Attribute.Boolean;
+    shippingMethod: Schema.Attribute.Text;
+    shippingPrice: Schema.Attribute.Decimal;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    username: Schema.Attribute.String;
+  };
+}
+
 export interface ApiCollectionCollection extends Struct.CollectionTypeSchema {
   collectionName: 'collections';
   info: {
@@ -1198,6 +1237,7 @@ declare module '@strapi/strapi' {
       'api::cart-item.cart-item': ApiCartItemCartItem;
       'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;
+      'api::checkout.checkout': ApiCheckoutCheckout;
       'api::collection.collection': ApiCollectionCollection;
       'api::global.global': ApiGlobalGlobal;
       'api::product.product': ApiProductProduct;
